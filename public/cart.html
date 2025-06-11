@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriShop - Cart</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .cart-container {
+      padding: 20px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .cart-item img {
+      width: 100px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-right: 15px;
+    }
+    .cart-item-details {
+      flex: 1;
+    }
+    .cart-item button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #orderNow {
+      display: none;
+      padding: 10px 20px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">myBlog</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">My profile</a>
+      <a href="compose.html">Compose</a>
+      <a href="shop.html">Shop</a>
+      <a href="cart.html">Cart 🛒</a>
+      <a href="logout">Logout</a>
+    </nav>
+  </header>
 
+  <div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <div style="text-align: center;">
+      <button id="orderNow" onclick="orderNow()">Order Now</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-column">
+        <h4>Get to Know Us</h4>
+        <p>About Us</p>
+        <p>Careers</p>
+        <p>Blog</p>
+      </div>
+      <div class="footer-column">
+        <h4>Connect with Us</h4>
+        <p>Facebook</p>
+        <p>Twitter</p>
+        <p>Instagram</p>
+      </div>
+      <div class="footer-column">
+        <h4>Make Money with Us</h4>
+        <p>Sell on Agri-Blog</p>
+        <p>Advertise</p>
+        <p>Affiliate Program</p>
+      </div>
+      <div class="footer-column">
+        <h4>Let Us Help You</h4>
+        <p>Your Account</p>
+        <p>Help</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 Agri-Blog. All rights reserved.
+      <br />
+      <small>Designed and Developed by <strong>Yashwanth Gowda B C</strong></small>
+    </div>
+  </footer>
+
+  <script>
+    async function loadCart() {
+      const res = await fetch('/cart');
+      const cart = await res.json();
+
+      const container = document.getElementById('cartItems');
+      const orderBtn = document.getElementById('orderNow');
+
+      if (!cart.length) {
+        container.innerHTML = '<p>Your cart is empty.</p>';
+        orderBtn.style.display = 'none';
+        return;
+      }
+
+      container.innerHTML = cart.map((item, index) => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}" />
+          <div class="cart-item-details">
+            <h4>${item.name}</h4>
+            <p>₹${item.price}</p>
+          </div>
+          <button onclick="removeItem(${index})">Remove</button>
+        </div>
+      `).join('');
+
+      orderBtn.style.display = 'inline-block';
+    }
+
+    async function removeItem(index) {
+      const res = await fetch('/cart/' + index, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      alert(data.message);
+      loadCart();
+    }
+
+    async function orderNow() {
+  try {
+    const res = await fetch('/order', { method: 'POST' });
+    if (!res.ok) throw new Error('Order failed');
+    const data = await res.json();
+    alert(data.message || "Thanks for ordering!");
+    window.location.href = 'thank-you.html';
+  } catch (err) {
+    alert('Failed to place order. Please try again.');
+  }
+}
+
+    loadCart();
+  </script>
+</body>
+</html>

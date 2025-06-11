@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Your Product</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+   
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 60px);
+      padding: 20px;
+    }
+
+    form {
+      max-width: 400px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="add-product.html">Add Your Product</a>
+  </nav>
+
+  <main>
+    <h1>Add Your Product</h1>
+    <form action="/add-product" method="POST" enctype="multipart/form-data">
+      <label>Product Name:</label><br />
+      <input type="text" name="name" required /><br /><br />
+
+      <label>Price:</label><br />
+      <input type="text" name="price" required /><br /><br />
+
+      <label>Upload Image:</label><br />
+      <input type="file" name="image" accept="image/*" required /><br /><br />
+
+      <button type="submit">Submit Product</button>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriBot Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #bot-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 26px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    /* Chat Window */
+    #chat-container {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 320px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    #chat-header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    #chat-body {
+      padding: 15px;
+      max-height: 250px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    .chat-option {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: none;
+      background-color: #f1f1f1;
+      border-radius: 6px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .chat-option:hover {
+      background-color: #e0e0e0;
+    }
+
+    .chat-msg {
+      margin: 8px 0;
+    }
+
+    .chat-msg.user {
+      text-align: right;
+      color: green;
+    }
+
+    .chat-msg.bot {
+      text-align: left;
+      color: #333;
+    }
+
+    #chat-input-area {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+    }
+
+    #chat-input-area input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #chat-input-area button {
+      margin-left: 5px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="bot-icon" onclick="toggleChat()">💬</div>
+
+  <!-- Chat Window -->
+  <div id="chat-container">
+    <div id="chat-header">
+      <span>AgriBot</span>
+      <span onclick="toggleChat()" style="cursor: pointer;">✖</span>
+    </div>
+    <div id="chat-body">
+      <p>To get started, please select the option that best describes your job role:</p>
+      <button class="chat-option" onclick="sendOption('Crop producer')">Crop producer</button>
+      <button class="chat-option" onclick="sendOption('Sourcing from farms')">Sourcing from farms</button>
+      <button class="chat-option" onclick="sendOption('Selling to farms')">Selling to farms</button>
+      <button class="chat-option" onclick="sendOption('Just exploring')">Just exploring</button>
+      <div id="chat-messages"></div>
+    </div>
+    <div id="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Write a message..." />
+      <button onclick="sendMessage()">▶</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleChat() {
+      const chat = document.getElementById("chat-container");
+      chat.style.display = (chat.style.display === "none" || chat.style.display === "") ? "flex" : "none";
+    }
+
+    function sendOption(option) {
+      addMessage("You", option, "user");
+      setTimeout(() => {
+        addMessage("AgriBot", `Thanks for selecting "${option}". How can I assist you further?`, "bot");
+      }, 500);
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("chat-input");
+      const text = input.value.trim();
+      if (text === "") return;
+      addMessage("You", text, "user");
+      input.value = "";
+
+      fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      })
+      .then(res => res.json())
+      .then(data => {
+        addMessage("AgriBot", data.reply, "bot");
+      })
+      .catch(() => {
+        addMessage("AgriBot", "Sorry, I'm currently unavailable.", "bot");
+      });
+    }
+
+    function addMessage(sender, message, type) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `chat-msg ${type}`;
+      msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+      document.getElementById("chat-messages").appendChild(msgDiv);
+      document.getElementById("chat-body").scrollTop = document.getElementById("chat-body").scrollHeight;
+    }
+  </script>
+</body>
+</html>

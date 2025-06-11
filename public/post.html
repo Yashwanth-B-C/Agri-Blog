@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriBlog - Post</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">myBlog</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">My profile</a>
+      <a href="logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="container" id="postView">
+    <h2>Loading...</h2>
+  </main>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <h4>Get to Know Us</h4>
+      <p>About Us</p>
+      <p>Careers</p>
+      <p>Blog</p>
+    </div>
+    <div class="footer-column">
+      <h4>Connect with Us</h4>
+      <p>Facebook</p>
+      <p>Twitter</p>
+      <p>Instagram</p>
+    </div>
+    <div class="footer-column">
+      <h4>Make Money with Us</h4>
+      <p>Sell on Agri-Blog</p>
+      <p>Advertise</p>
+      <p>Affiliate Program</p>
+    </div>
+    <div class="footer-column">
+      <h4>Let Us Help You</h4>
+      <p>Your Account</p>
+      <p>Help</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Agri-Blog. All rights reserved.
+    <br />
+    <small>Designed and Developed by <strong>Yashwanth Gowda B C</strong></small>
+  </div>
+</footer>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get("id");
+
+    fetch("/posts")
+      .then(res => res.json())
+      .then(posts => {
+        const post = posts.find(p => p.id === postId);
+        const container = document.getElementById("postView");
+        if (post) {
+          container.innerHTML = `
+            <div class="post-full">
+              <img src="${post.image}" alt="${post.title}" class="post-image" />
+              <h2>${post.title}</h2>
+              <div class="post-meta">By ${post.author} | ${post.date}</div>
+              <p>${post.content}</p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = "<p>Post not found.</p>";
+        }
+      });
+  </script>
+</body>
+</html>

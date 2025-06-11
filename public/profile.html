@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriBlog - My Profile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">AgriBlog</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">My Profile</a>
+      <a href="compose.html">Compose</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2 style="text-align:center; margin: 30px 0;">My Articles</h2>
+    <div class="article-grid" id="myPosts"></div>
+  </main>
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <h4>Get to Know Us</h4>
+      <p>About Us</p>
+      <p>Careers</p>
+      <p>Blog</p>
+    </div>
+    <div class="footer-column">
+      <h4>Connect with Us</h4>
+      <p>Facebook</p>
+      <p>Twitter</p>
+      <p>Instagram</p>
+    </div>
+    <div class="footer-column">
+      <h4>Make Money with Us</h4>
+      <p>Sell on Agri-Blog</p>
+      <p>Advertise</p>
+      <p>Affiliate Program</p>
+    </div>
+    <div class="footer-column">
+      <h4>Let Us Help You</h4>
+      <p>Your Account</p>
+      <p>Help</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Agri-Blog. All rights reserved.
+    <br />
+    <small>Designed and Developed by <strong>Yashwanth Gowda B C</strong></small>
+  </div>
+</footer>
+  <script>
+    async function loadMyPosts() {
+      const res = await fetch("/my-posts");
+      const posts = await res.json();
+      const myPosts = document.getElementById("myPosts");
+
+      posts.forEach(post => {
+        myPosts.innerHTML += `
+          <div class="article-card">
+            <img src="${post.image || 'https://source.unsplash.com/featured/?agriculture'}" alt="Post Image">
+            <div class="article-content">
+              <h3>${post.title}</h3>
+              <p>${post.content.slice(0, 100)}...</p>
+              <div class="article-meta">By ${post.author || "You"} on ${post.date}</div>
+              <a class="read-more" href="post.html?id=${post.id}">Read</a>
+              <br />
+              <a class="read-more" style="margin-top: 8px;" href="compose.html?id=${post.id}">Edit</a>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    loadMyPosts();
+  </script>
+</body>
+</html>

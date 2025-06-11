@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriShop - Products</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .shop-container {
+      padding: 20px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .product-card button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .carousel {
+    width: 100%;
+    max-width: 100%;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+    margin: 20px 0 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+  }
+
+  .slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    flex-shrink: 0;
+  }
+    @keyframes slide {
+      0%   { transform: translateX(0%); }
+      33%  { transform: translateX(-100%); }
+      66%  { transform: translateX(-200%); }
+      100% { transform: translateX(0%); }
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">myBlog</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">My profile</a>
+      <a href="compose.html">Compose</a>
+      <a href="shop.html">Shop</a>
+      <a href="add-product.html">Add Your Product</a>
+      <a href="cart.html">Cart 🛒</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <div class="carousel">
+    <div class="slides">
+      <img src="images/banner1.jpeg" class="slide" alt="Farm Offer 1" />
+      <img src="images/banner2.jpg" class="slide" alt="Farm Offer 2" />
+      <img src="images/banner3.jpg" class="slide" alt="Farm Offer 3" />
+    </div>
+  </div>
+
+  <div class="shop-container">
+    <h2>Shop Farm Products</h2>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+
+  <footer>
+   <div class="footer-container">
+    <div class="footer-column">
+      <h4>Get to Know Us</h4>
+      <p>About Us</p>
+      <p>Careers</p>
+      <p>Blog</p>
+    </div>
+    <div class="footer-column">
+      <h4>Connect with Us</h4>
+      <p>Facebook</p>
+      <p>Twitter</p>
+      <p>Instagram</p>
+    </div>
+    <div class="footer-column">
+      <h4>Make Money with Us</h4>
+      <p>Sell on Agri-Blog</p>
+      <p>Advertise</p>
+      <p>Affiliate Program</p>
+    </div>
+    <div class="footer-column">
+      <h4>Let Us Help You</h4>
+      <p>Your Account</p>
+      <p>Help</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Agri-Blog. All rights reserved.
+    <br />
+    <small>Designed and Developed by <strong>Yashwanth Gowda B C</strong></small>
+  </div>
+  </footer>
+
+  <script>
+   
+    function checkAddedMessage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('added') === 'true') {
+        alert('Product added successfully!!!');
+        history.replaceState(null, '', window.location.pathname);
+      }
+    }
+
+    async function loadProducts() {
+      const res = await fetch('/products');
+      const products = await res.json();
+
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = products.map(p => `
+        <div class="product-card">
+          <img src="${p.image}" alt="${p.name}" />
+          <h4>${p.name}</h4>
+          <p>₹${p.price}</p>
+          <button onclick="addToCart('${p.id}')">Add to Cart</button>
+        </div>
+      `).join('');
+    }
+
+    async function addToCart(productId) {
+      const res = await fetch('/cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId })
+      });
+      const data = await res.json();
+      alert(data.message || 'Added to cart!');
+    }
+
+    checkAddedMessage();
+    loadProducts();
+  </script>
+   <script>
+    let currentSlide = 0;
+    const slides = document.querySelector(".slides");
+    const totalSlides = slides.children.length;
+
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }, 3000); 
+  </script>
+</body>
+</html>

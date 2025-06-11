@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriBlog - Home</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #bot-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 26px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    #chat-container {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 320px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    #chat-header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    #chat-body {
+      padding: 15px;
+      max-height: 250px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    #chat-body p {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 6px;
+    }
+
+    #chat-body button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 15px;
+      background-color: #e6f3ea;
+      color: #333;
+      border: none;
+      border-radius: 6px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    #chat-body button:hover {
+      background-color: #cde8d3;
+    }
+
+    .chat-msg {
+      margin: 8px 0;
+    }
+
+    .chat-msg.user {
+      text-align: right;
+      color: green;
+    }
+
+    .chat-msg.bot {
+      text-align: left;
+      color: #333;
+    }
+
+    #chat-input-area {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+    }
+
+    #chat-input-area input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #chat-input-area button {
+      margin-left: 5px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">myBlog</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">My profile</a>
+      <a href="compose.html">Compose</a>
+      <a href="shop.html">Shop</a> 
+      <a href="cart.html">Cart</a>
+      <a href="logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>Popular Articles</h2>
+    <div class="article-grid" id="popularPosts"></div>
+
+    <h2>Recent Articles</h2>
+    <div class="article-grid" id="recentPosts"></div>
+
+  </main>
+  <div id="bot-icon" onclick="toggleChat()">💬</div>
+
+  <div id="chat-container">
+    <div id="chat-header">
+      <span>AgriBot</span>
+      <span onclick="toggleChat()" style="cursor: pointer;">✖</span>
+    </div>
+    <div id="chat-body">
+      <p><strong>Select a role to begin:</strong></p>
+      <button onclick="sendOption('Crop producer')">Crop producer</button>
+      <button onclick="sendOption('Sourcing from farms')">Sourcing from farms</button>
+      <button onclick="sendOption('Selling to farms')">Selling to farms</button>
+      <button onclick="sendOption('Just exploring')">Just exploring</button>
+      <div id="chat-messages"></div>
+    </div>
+    <div id="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Ask me anything...">
+      <button onclick="sendMessage()">▶</button>
+    </div>
+  </div>
+  <!-- ✅ FOOTER END -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <h4>Get to Know Us</h4>
+      <p>About Us</p>
+      <p>Careers</p>
+      <p>Blog</p>
+    </div>
+    <div class="footer-column">
+      <h4>Connect with Us</h4>
+      <p>Facebook</p>
+      <p>Twitter</p>
+      <p>Instagram</p>
+    </div>
+    <div class="footer-column">
+      <h4>Make Money with Us</h4>
+      <p>Sell on Agri-Blog</p>
+      <p>Advertise</p>
+      <p>Affiliate Program</p>
+    </div>
+    <div class="footer-column">
+      <h4>Let Us Help You</h4>
+      <p>Your Account</p>
+      <p>Help</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Agri-Blog. All rights reserved.
+    <br />
+    <small>Designed and Developed by <strong>Yashwanth Gowda B C</strong></small>
+  </div>
+</footer>
+<!-- ✅ FOOTER END -->
+
+  <script>
+    async function loadPosts() {
+      const res = await fetch("/posts");
+      const posts = await res.json();
+
+      const popular = document.getElementById("popularPosts");
+      const recent = document.getElementById("recentPosts");
+
+      popular.innerHTML = "";
+      recent.innerHTML = "";
+
+      posts.slice(0, 9).forEach(post => {
+        popular.innerHTML += `
+          <div class="article-card">
+            <img src="${post.image}" alt="${post.title}" />
+            <div class="article-content">
+              <h3>${post.title}</h3>
+              <p>${post.content.slice(0, 100)}...</p>
+              <div class="article-meta">By ${post.author} on ${post.date}</div>
+              <a class="read-more" href="post.html?id=${post.id}">Read more</a>
+            </div>
+          </div>
+        `;
+      });
+
+      posts.slice(-12).reverse().forEach(post => {
+        recent.innerHTML += `
+          <div class="article-card">
+            <img src="${post.image}" alt="${post.title}" />
+            <div class="article-content">
+              <h3>${post.title}</h3>
+              <p>${post.content.slice(0, 100)}...</p>
+              <div class="article-meta">By ${post.author} on ${post.date}</div>
+              <a class="read-more" href="post.html?id=${post.id}">Read more</a>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    loadPosts();
+
+    function toggleChat() {
+      const chat = document.getElementById("chat-container");
+      chat.style.display = (chat.style.display === "none" || chat.style.display === "") ? "flex" : "none";
+    }
+
+    function sendOption(option) {
+      addMessage("You", option, "user");
+      setTimeout(() => {
+        addMessage("AgriBot", `Thanks for selecting "${option}". How can I assist you further?`, "bot");
+      }, 500);
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("chat-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessage("You", message, "user");
+      input.value = "";
+
+      fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      })
+      .then(res => res.json())
+      .then(data => {
+        addMessage("AgriBot", data.reply, "bot");
+      })
+      .catch(() => {
+        addMessage("AgriBot", "Sorry, I’m currently unavailable.", "bot");
+      });
+    }
+
+    function addMessage(sender, message, type) {
+      const container = document.getElementById("chat-messages");
+      const msg = document.createElement("div");
+      msg.className = `chat-msg ${type}`;
+      msg.innerHTML = `<strong>${sender}:</strong> ${message}`;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }
+  </script>
+</body>
+</html>

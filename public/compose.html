@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgriBlog - Compose</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="compose-page">
+  <header>
+    <h1>AgriBlog</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">My Profile</a>
+      <a href="compose.html">Compose</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2 style="text-align: center; margin-top: 30px;">Create New Blog Post</h2>
+    <form class="blog-submit" id="composeForm" enctype="multipart/form-data">
+      <input type="text" name="title" id="title" placeholder="Post Title" required />
+      <input type="file" name="image" id="image" accept="image/*" />
+      <textarea name="content" id="content" placeholder="Write your article here..." required></textarea>
+      <button type="submit">Publish</button>
+    </form>
+  </main>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <h4>Get to Know Us</h4>
+      <p>About Us</p>
+      <p>Careers</p>
+      <p>Blog</p>
+    </div>
+    <div class="footer-column">
+      <h4>Connect with Us</h4>
+      <p>Facebook</p>
+      <p>Twitter</p>
+      <p>Instagram</p>
+    </div>
+    <div class="footer-column">
+      <h4>Make Money with Us</h4>
+      <p>Sell on Agri-Blog</p>
+      <p>Advertise</p>
+      <p>Affiliate Program</p>
+    </div>
+    <div class="footer-column">
+      <h4>Let Us Help You</h4>
+      <p>Your Account</p>
+      <p>Help</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Agri-Blog. All rights reserved.
+    <br />
+    <small>Designed and Developed by <strong>Yashwanth Gowda B C</strong></small>
+  </div>
+</footer>
+
+  <script>
+    document.getElementById("composeForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = document.getElementById("composeForm");
+      const formData = new FormData(form);
+      formData.append("date", new Date().toISOString().split("T")[0]);
+      formData.append("author", "Admin");
+
+      await fetch('/create-post', {
+        method: 'POST',
+        body: formData
+      });
+
+      window.location.href = 'profile.html';
+    });
+  </script>
+</body>
+</html>
