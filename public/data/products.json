@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "name": "Organic Tomatoes",
+    "price": 50,
+    "image": "images/tomato.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Basmati Rice",
+    "price": 90,
+    "image": "/images/rice.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Fresh Carrots",
+    "price": 40,
+    "image": "/images/carrots.jpeg"
+  },
+  {
+    "id": 4,
+    "name": "A2 Milk",
+    "price": 70,
+    "image": "/images/milk.webp"
+  },
+  {
+    "id": 5,
+    "name": "Desi Eggs",
+    "price": 60,
+    "image": "/images/eggs.webp"
+  },
+  {
+    "id": 6,
+    "name": "Organic Onions",
+    "price": 45,
+    "image": "/images/onion.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Wheat (5kg)",
+    "price": 150,
+    "image": "/images/wheat.webp"
+  },
+  {
+    "id": 8,
+    "name": "Groundnut Oil",
+    "price": 180,
+    "image": "/images/oil.webp"
+  },
+  {
+    "id": 9,
+    "name": "Chili Powder",
+    "price": 80,
+    "image": "/images/chili.jpeg"
+  },
+  {
+    "id": 10,
+    "name": "Turmeric",
+    "price": 60,
+    "image": "/images/turmeric.jpg"
+  },
+  {
+    "id": 11,
+    "name": "Jaggery",
+    "price": 55,
+    "image": "/images/jaggery.webp"
+  },
+  {
+    "id": 12,
+    "name": "Spinach",
+    "price": 20,
+    "image": "/images/spinach.webp"
+  },
+  {
+    "id": 13,
+    "name": "Cabbage",
+    "price": 30,
+    "image": "/images/cabbage.jpeg"
+  },
+  {
+    "id": 14,
+    "name": "Cauliflower",
+    "price": 35,
+    "image": "/images/cauliflower.jpg"
+  },
+  {
+    "id": 15,
+    "name": "Pumpkin",
+    "price": 45,
+    "image": "/images/pumpkin.jpg"
+  },
+  {
+    "id": 16,
+    "name": "Bottle Gourd",
+    "price": 35,
+    "image": "/images/lauki.webp"
+  },
+  {
+    "id": 17,
+    "name": "Coconut",
+    "price": 25,
+    "image": "/images/coconut.webp"
+  },
+  {
+    "id": 18,
+    "name": "Bananas (Dozen)",
+    "price": 50,
+    "image": "/images/banana.jpeg"
+  },
+  {
+    "id": 19,
+    "name": "Papaya",
+    "price": 40,
+    "image": "/images/papaya.jpeg"
+  },
+  {
+    "id": 20,
+    "name": "Mangoes",
+    "price": 100,
+    "image": "/images/mango.webp"
+  },
+  {
+    "id": 21,
+    "name": "Apple",
+    "price": 149,
+    "image": "/images/apple.webp"
+  },
+  {
+    "id": "1749215897904",
+    "name": "Orange",
+    "price": "80",
+    "image": "/uploads/1749215897899.jpg"
+  }
+]
